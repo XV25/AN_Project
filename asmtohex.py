@@ -245,12 +245,13 @@ def output_hex_instructions(hexInstructions, fileName):
         adress +=1
 
 
-
-inputFileName = 'asmInstructions.txt'
-outputFileName = 'hexInstructions.txt'
-
-asmInstructions = load_ASM(inputFileName)
-numInstructions = analyze_instructions(asmInstructions)
-hexInstructions = compute_hex_instructions(numInstructions)
-
-output_hex_instructions(hexInstructions, outputFileName)
+if __name__ == "__main__":
+        
+    inputFileName = 'asmInstructions.txt'
+    outputFileName = 'hexInstructions.txt'
+    
+    asmInstructions = load_ASM(inputFileName)
+    numInstructions = analyze_instructions(asmInstructions)
+    hexInstructions = compute_hex_instructions(numInstructions)
+    
+    output_hex_instructions(hexInstructions, outputFileName)

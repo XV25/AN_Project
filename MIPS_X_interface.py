@@ -10,6 +10,7 @@ import time
 import signal
 import sys
 
+
 """Registres """
 
 class VM():
@@ -41,10 +42,9 @@ class VM():
         """
         self.t_init = time.time()
         self.n_reg = 32
-        self.n_mem = 1024
+        self.n_mem = 32 #1024
         self.regs = [0 for k in range(self.n_reg)]
         self.data = [None for k in range(self.n_mem)]
-        self.getdata(self.data)
         self.prog = self.getprog(inputFile)
         self.pc = 0
 
@@ -58,10 +58,12 @@ class VM():
         self.n = 0
         self.c_cycle = 0
         
+        self.running = 1
         
-        self.step_choice()
+        self.instruction = ''
+#        self.step_choice()
         
-        self.deb_instr = time.time()
+#        self.deb_instr = time.time()
 
         
     def step_choice(self):
@@ -149,7 +151,7 @@ class VM():
         lines = [line for line in lines if line != '']
         return lines
     
-    def getdata(self,data):
+    def getdata(self,filename):
         """
         Récupère les données nécessaires à l'exécution du programme (contenues
         dans le fichier hexData.txt), les insère dans la mémoire de la machine
@@ -165,13 +167,13 @@ class VM():
             Rien.
         
         """
-        ensData = self.load_hex("hexdata.txt")
+        ensData = self.load_hex(filename)
         Ldata = [prog.split() for prog in ensData]
 
         for k in Ldata:
-            data[ int(k[0],16)] = int(k[1],16)
+            self.data[ int(k[0],16)] = int(k[1],16)
         #print(ensData)
-        print(data)
+        print(self.data)
 
         #return(data)
 
@@ -368,9 +370,11 @@ class VM():
         """
         if self.imm == 0:
             print('add r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'add r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1] + self.regs[self.o]
         elif self.imm == 1:
             print('add r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'add r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             print(self.regs[self.reg1])
             self.regs[self.reg2] = self.regs[self.reg1] + self.o
     
@@ -390,9 +394,11 @@ class VM():
         """
         if self.imm == 0:
             print('sub r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'sub r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1] - self.regs[self.o]
         elif self.imm == 1:
             print('sub r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'sub r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1] - self.o        
     
 
@@ -412,9 +418,11 @@ class VM():
         """
         if self.imm == 0:
             print('mult r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'mult r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]*self.regs[self.o]
         elif self.imm == 1:
             print('mult r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'mult r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]*self.o                    
     
     def div(self):
@@ -433,9 +441,11 @@ class VM():
         """
         if self.imm == 0:
             print('div r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'div r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]/self.regs[self.o]
         elif self.imm == 1:
             print('div r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'div r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]/self.o                            
 
     def andd(self):
@@ -454,9 +464,11 @@ class VM():
         """
         if self.imm == 0:
             print('and r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'and r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]& self.regs[self.o]
         elif self.imm == 1:
             print('and r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'and r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]& self.o               
     
     def orr(self):
@@ -475,9 +487,11 @@ class VM():
         """
         if self.imm == 0:
             print('or r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'or r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]|self.regs[self.o]
         elif self.imm == 1:
             print('or r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'or r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]| self.o           
     
     def xor(self):
@@ -496,9 +510,11 @@ class VM():
         """
         if self.imm == 0:
             print('xor r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'xor r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) 
             self.regs[self.reg2] = self.regs[self.reg1]^self.regs[self.o]
         elif self.imm == 1:
             print('xor r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'xor r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]^self.o 
     
     def shl(self):
@@ -516,9 +532,11 @@ class VM():
         """
         if self.imm == 0:
             print('left r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'left r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]<<self.regs[self.o]
         elif self.imm == 1:
             print('left r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+            self.instruction = 'left r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
             self.regs[self.reg2] = self.regs[self.reg1]<<self.o       
     
     def shr(self):
@@ -536,9 +554,11 @@ class VM():
         """
         if self.imm == 0:
              print('right r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'right r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
              self.regs[self.reg2] = self.regs[self.reg1]>>self.regs[self.o]
         elif self.imm == 1:
              print('right r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'right r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
              self.regs[self.reg2] = self.regs[self.reg1]>>self.o     
 
     def slt(self):
@@ -558,6 +578,7 @@ class VM():
         """
         if self.imm == 0:
              print('inf r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'inf r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
              self.regs[self.reg2] = int(self.regs[self.reg1]<self.regs[self.o])
         elif self.imm == 1:
             #print('inf r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
@@ -579,9 +600,11 @@ class VM():
         """
         if self.imm == 0:
              print('inf/eg r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'inf/eg r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
              self.regs[self.reg2] = int(self.regs[self.reg1]<=self.regs[self.o])
         elif self.imm == 1:
              print('inf/eg r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'inf/eg r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
              self.regs[self.reg2] = int(self.regs[self.reg1]<=self.o)
     
     def seq(self):
@@ -600,9 +623,11 @@ class VM():
         """
         if self.imm == 0:
              print('seq r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'seq r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
              self.regs[self.reg2] = int(self.regs[self.reg1]==self.regs[self.o])
         elif self.imm == 1:
              print('seq r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'seq r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
              self.regs[self.reg2] = int(self.regs[self.reg1]==self.o)
     
     def load(self):
@@ -625,6 +650,7 @@ class VM():
 
         if self.imm == 0:
              print('load r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'load r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
              if self.data[self.regs[self.reg1] + self.regs[self.o] ] == None :
                  print("Error : Nonetype at address %s in data"%(self.reg1 + self.regs[self.o] ))
                  print("The program will continue without the loaded data\n")
@@ -637,6 +663,7 @@ class VM():
             
         elif self.imm == 1:
              print('load r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'load r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
              if self.data[self.regs[self.reg1] + self.o ] == None :
                  print("Error : Nonetype at address %s in data"%(self.reg1 + self.o ))
                  print("The program will continue without the loaded data\n")
@@ -663,10 +690,12 @@ class VM():
         """
         if self.imm == 0:
              print('store r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'store r%s r%s r%s\n'%(self.reg1,self.o,self.reg2)
 
              self.data[self.regs[self.reg1] + self.regs[self.o] ] = self.regs[self.reg2] 
         elif self.imm == 1:
              print('store r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
+             self.instruction = 'store r%s #%s r%s\n'%(self.reg1,self.o,self.reg2)
              print(self.regs[self.reg1] + self.o )
              self.data[self.regs[self.reg1] + self.o ] = self.regs[self.reg2] 
 
@@ -688,10 +717,12 @@ class VM():
         """
         if self.imm == 0:
              print('jmp r%s r%s \n'%(self.reg2,self.o) )
+             self.instruction = 'jmp r%s r%s \n'%(self.reg2,self.o)
              self.regs[self.reg2] = self.pc +1
              self.pc = self.regs[self.o] 
         elif self.imm == 1:
              print('jmp r%s #%s \n'%(self.reg2,self.o) )
+             self.instruction = 'jmp r%s #%s \n'%(self.reg2,self.o)
              self.regs[self.reg2] = self.pc +1
              self.pc = self.o
     
@@ -710,6 +741,7 @@ class VM():
             Rien.        
         """
         print('braz r%s #%s \n'%(self.reg1,self.a) )
+        self.instruction = 'braz r%s #%s \n'%(self.reg1,self.a) 
         if self.regs[self.reg1] == 0:
             self.pc = self.a
             
@@ -728,6 +760,7 @@ class VM():
             Rien.        
         """
         print('branz r%s #%s \n'%(self.reg1,self.a) )
+        self.instruction = 'branz r%s #%s \n'%(self.reg1,self.a)
         if self.regs[self.reg1] != 0:
             self.pc = self.a
             
@@ -750,6 +783,7 @@ class VM():
         
         """
         print('scall #%s \n'%(self.n) )
+        self.instruction = 'scall #%s \n'%(self.n)
         if self.n == 0:
             k = input("Enter a value")
             self.regs[1] = int(k)
@@ -774,13 +808,39 @@ class VM():
         print('regs : ')
         print(self.regs)
         print('\n')
+        self.IHM.affichageReg(self.outTextRegs)
         if self.running == 2:
             wait = input("Press any touch to continue; press C to go to continuous mode.")
             if wait == 'C' or wait == 'c':
                 self.running =1
            
 
-    
+    def outTextRegs(self):
+        txt = ''
+        j = 0
+        for i in self.regs:
+            ligne = "r{} = {}\n".format(j,i)
+            txt = txt + ligne
+            j+=1
+        return txt
+    def outTextMem(self):
+        txt = ''
+        j = 0
+        for i in self.data:
+            ligne = "m{}. {}\n".format(j,i)
+            txt = txt + ligne
+            j+=1
+        return txt
+        
+        
+    def unTour(self):
+        instr = self.fetch()
+        self.decode(instr)
+        self.evalu()
+        self.regs[0] = 0
+        
+        
+        
     def run(self):
         """
         
@@ -814,8 +874,9 @@ class VM():
         print("Durée depuis l'initialisation de l'ISS : %f \n"%self.t_dps_deb)
         print("Durée depuis l'exécution du programme mis en entrée : %f \n"%self.t_dps_init)
         
-if __name__ == "__main__":
+if __name__ == "__main__" :
     Pg = VM('hexInstructions.txt')
-
-    Pg.run()
+#    Pg.outTextRegs()
+#    Pg.run()
     print(Pg.c_cycle)
+
