@@ -1,0 +1,20 @@
+Lancer avec python le fichier interface.py
+
+Le bouton : Fichier à compiler permet de choisir un fichier assembleur que l'on veut convertir en fichier Hexadecimal
+Le bouton : Assembly permet de lancer la conversion du fichier assembleur en fichier hexadecimal. Le fichier de sortie est automatiquement chargé pour l'execution
+
+Execution : Commencer par charger le code Hexadecimal avant les donnees 
+
+le bouton : Load Fichier Hexadecimal permet de choisir le fichier en hexedeciaml que l'on veut executer
+
+le bouton : Load fichier Data Hexedecimal permet de charger n fichier de données 
+
+Le bouton : Pas a Pas permet l'execution pas à pas du programme
+Le bouton : Run permet de l'executer d'un seul coup
+
+
+
+
+
+
+

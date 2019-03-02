@@ -42,7 +42,7 @@ class VM():
         """
         self.t_init = time.time()
         self.n_reg = 32
-        self.n_mem = 32 #1024
+        self.n_mem = 1024
         self.regs = [0 for k in range(self.n_reg)]
         self.data = [None for k in range(self.n_mem)]
         self.prog = self.getprog(inputFile)
@@ -63,7 +63,7 @@ class VM():
         self.instruction = ''
 #        self.step_choice()
         
-#        self.deb_instr = time.time()
+        self.deb_instr = time.time()
 
         
     def step_choice(self):
@@ -826,8 +826,12 @@ class VM():
     def outTextMem(self):
         txt = ''
         j = 0
-        for i in self.data:
-            ligne = "m{}. {}\n".format(j,i)
+        if (len(self.data) > 96):
+            offset = int(96/3)
+        else :
+            offset = int(len(self.data)/3)
+        for i in range(offset):
+            ligne = "m{} = {}      m{} = {}      m{} = {}\n".format(j,self.data[i],j+offset, self.data[i+offset], j+2*offset, self.data[i+2*offset] )
             txt = txt + ligne
             j+=1
         return txt

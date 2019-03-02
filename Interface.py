@@ -6,9 +6,7 @@ import time
 
 
 class Interface(Frame):
-    
-    """Notre fenêtre principale.
-    Tous les widgets sont stockés comme attributs de cette fenêtre."""
+
     
     def __init__(self, fenetre, **kwargs):
         Frame.__init__(self, fenetre, width=700, height=700, **kwargs)
@@ -43,7 +41,7 @@ class Interface(Frame):
         self.bouton_pasapas = Button(self, text="Pas à Pas", command=self.pasapas)
         self.bouton_pasapas.grid(row=self.posISS,column=3)
         
-        self.bouton_loadData = Button(self, text="LoadData", command=self.loadData)
+        self.bouton_loadData = Button(self, text="Load Fichier Data Hexadecimal", command=self.loadData)
         self.bouton_loadData.grid(row=self.posISS,column=2)
         
         self.registre = Label(self, text= 'Registres')
@@ -52,6 +50,7 @@ class Interface(Frame):
         self.instr.grid(row = self.posISS+2, column = 0)
         self.memoire = Label(self, text= 'Memoire')
         self.memoire.grid(row = self.posISS+2, column = 2)
+
         
         Label(self, text = '  ').grid(row = 0, column = 6)
         Label(self, text = '  ').grid(row = self.posAssembly+1, column = 6)
@@ -91,27 +90,29 @@ class Interface(Frame):
         path = Label(self, text= filename)
         path.grid(row=self.posISS + 1, column=2)
 
-    def startISS(self):     
+    def startISS(self): 
         while(self.simulation.running != 0):
-            self.bouton_pause = Button(self, text="Pause",command=self.pauseISS)
-            self.bouton_pause.grid(row=self.posISS,column=5)
             self.simulation.unTour()
-            time.sleep(0.1)
+#            time.sleep(0.0001)
             
 
         self.affichageReg(self.simulation.outTextRegs())
-
-    
-    def pauseISS(self):
-        self.simulation.running = 0
+        self.showStatus()
+        
+    def showStatus(self):
+        nombre_de_cycle = self.simulation.c_cycle
+#        temps_execution = self.simulation.t_dps_init
+        txt = "Fin d'execution : \n Nombre de cycle : {} \n".format(nombre_de_cycle)
+        self.status = Label(self, text = txt)
+        self.status.grid(row = self.posISS + 5, column = 0)        
         
     def pasapas(self):
-        
-    
         self.simulation.unTour()
         self.affichageReg(self.simulation.outTextRegs())
         self.affichageInstr(self.simulation.instruction)
         self.affichageMemoire(self.simulation.outTextMem())
+        if self.simulation.running == 0:
+            self.showStatus()
         
     def startAssembly(self):
         inputFileName = self.filename_assembleur
@@ -124,6 +125,9 @@ class Interface(Frame):
         assbly.output_hex_instructions(hexInstructions, outputFileName)
         path = Label(self, text= outputFileName)
         path.grid(row=self.posAssembly + 1, column=3)
+        self.simulation = MIPS_X_interface.VM(outputFileName)
+        path = Label(self, text= outputFileName)
+        path.grid(row=self.posISS +1, column=0)
         
 if __name__ == "__main__":
     fenetre = Tk()
