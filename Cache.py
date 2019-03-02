@@ -21,21 +21,26 @@ class Cache():
     S : nombre d'ensemble
     E : nombre de lignes par ensemble --> toujours égal à 1 car cache à 
     correspondance directe.
-    B : nombre de blocs (pas la taille des blocs ici; grandeur non nécessaire
-    sous Python.)
+    B : taille de tous les blocs. Ici, B = 2 octets
     m : nombre d'adresses physiques
+    
+    Codé pour un cache à 64 bytes
+    --> 8 octets
+    --> C = BxExS = 8
+    --> S = 4
         
     """
-    def __init__(self,m):
-        self.S = m//2
+    def __init__(self,Mn):
+        self.Mn = Mn
+        self.S = 4
         self.E = 1
         self.B = 2
-        self.m = m
+        self.m = log2(Mn)
         self.s = log2(self.S)
         self.b = log2(self.B)
         self.t = self.m - (self.s+self.b)
 #        print(self.t)
-        self.Mem = M.Memory(m)
+        self.Mem = M.Memory(Mn)
         
         self.Cache = []
         for k in range(self.S):
@@ -99,8 +104,7 @@ class Cache():
         Renvoie le tag, l'ensemble, et le b offset associé à l'adresse entrée.        
         """
         S = self.S
-        t = int( addr > 2**(S-1) )
+        t = int((addr)//(self.B*S))
         s = (addr//2)%S
         b = addr%2
         return(t,s,b)
-        
