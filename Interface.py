@@ -66,9 +66,12 @@ class Interface(Frame):
         self.affReg.grid(row = self.posISS + 5, column = 3)
         
     def affichageInstr(self,message):
-        print(message)
         self.affInstr = Label(self, text = message)
         self.affInstr.grid(row = self.posISS + 5, column = 0)
+    
+    def affichageProgrammeCounter(self):
+        self.affPC = Label(self, text = "pc = {}".format(self.simulation.pc))
+        self.affPC.grid(row = self.posISS + 6, column = 3)
         
     def getFiles_hex(self):
         filename = filedialog.askopenfilename()
@@ -100,9 +103,10 @@ class Interface(Frame):
         self.showStatus()
         
     def showStatus(self):
+        self.simulation.get_information_temps()
         nombre_de_cycle = self.simulation.c_cycle
-#        temps_execution = self.simulation.t_dps_init
-        txt = "Fin d'execution : \n Nombre de cycle : {} \n".format(nombre_de_cycle)
+        temps_execution = self.simulation.t_dps_init
+        txt = "Fin d'execution : \n Nombre de cycle : {} \n temps execution : {} s".format(nombre_de_cycle, temps_execution)
         self.status = Label(self, text = txt)
         self.status.grid(row = self.posISS + 5, column = 0)        
         
@@ -111,6 +115,7 @@ class Interface(Frame):
         self.affichageReg(self.simulation.outTextRegs())
         self.affichageInstr(self.simulation.instruction)
         self.affichageMemoire(self.simulation.outTextMem())
+        self.affichageProgrammeCounter()
         if self.simulation.running == 0:
             self.showStatus()
         
