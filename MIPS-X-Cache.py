@@ -9,6 +9,9 @@ Created on Mon Jan 14 10:38:49 2019
 import time
 import signal
 import sys
+import Cache as C
+
+
 
 """Registres """
 
@@ -41,10 +44,10 @@ class VM():
         """
         self.t_init = time.time()
         self.n_reg = 32
-        self.n_mem = 1024
+        self.n_mem = 32
         self.regs = [0 for k in range(self.n_reg)]
-        self.data = [None for k in range(self.n_mem)]
-        self.getdata(self.data)
+        self.Cach = C.Cache(self.n_mem)
+        self.getdata(self.Cach)
         self.prog = self.getprog(inputFile)
         self.pc = 0
 
@@ -93,7 +96,7 @@ class VM():
 
             signal.signal(signal.SIGINT, self.signal_handler)
             self.time_chx = input("How many time do you want between instructions?")
-            self.time_chx = int(self.time_chx)
+            self.time_chx = float(self.time_chx)
             self.running = 1
 
     def signal_handler(self, signal, frame):
@@ -123,11 +126,12 @@ class VM():
             chx = input("Would you either modify the time between instructions? [Y/N] \n")
             if chx == 'Y' or chx == 'y':
                 self.time_chx = input("How many time do you want between instructions? \n")
-                self.time_chx = int(self.time_chx)
+                self.time_chx = float(self.time_chx)
             else:
                 chx = input("Do you want to quit? [Y/N] \n")
                 if chx == 'Y' or chx == 'y':
-                    sys.exit(0)
+                    self.running = 0
+
 
 
     def load_hex(self,fileName):
@@ -149,7 +153,7 @@ class VM():
         lines = [line for line in lines if line != '']
         return lines
     
-    def getdata(self,data):
+    def getdata(self,Cach):
         """
         Récupère les données nécessaires à l'exécution du programme (contenues
         dans le fichier hexData.txt), les insère dans la mémoire de la machine
@@ -157,8 +161,7 @@ class VM():
         
         Paramètres:
         ------------
-            data : liste contenant l'ensemble des emplacements mémoire de la
-            machine virtuelle
+            Cach : objet Cache
             
         Renvoie : 
         ----------
@@ -169,9 +172,9 @@ class VM():
         Ldata = [prog.split() for prog in ensData]
 
         for k in Ldata:
-            data[ int(k[0],16)] = int(k[1],16)
-        #print(ensData)
-        print(data)
+            Cach.Mem.write(int(k[0],16),int(k[1],16) )
+        
+        print(self.Cach.Mem.data)
 
         #return(data)
 
@@ -328,11 +331,9 @@ class VM():
         
         if self.instrNum == 13:
             self.load()
-            self.c_cycle +=1
         
         if self.instrNum == 14:
             self.store()
-            self.c_cycle +=1
         
         if self.instrNum == 15:
             self.jmp()
@@ -624,26 +625,34 @@ class VM():
 
         if self.imm == 0:
              print('load r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
-             if self.data[self.regs[self.reg1] + self.regs[self.o] ] == None :
-                 print("Error : Nonetype at address %s in data"%(self.reg1 + self.regs[self.o] ))
-                 print("The program will continue without the loaded data\n")
-             elif (self.regs[self.reg1] + self.regs[self.o]) >= self.n_mem:
-                 print("Error : out of memory boundaries")
-                 print("The program will continue without the loaded data\n")
-             else:
-                 self.regs[self.reg2] = self.data[self.regs[self.reg1] + self.regs[self.o] ]
+             self.regs[self.reg2],verif = self.get_data(self.regs[self.reg1] + self.regs[self.o])
 
             
         elif self.imm == 1:
              print('load r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
-             if self.data[self.regs[self.reg1] + self.o ] == None :
-                 print("Error : Nonetype at address %s in data"%(self.reg1 + self.o ))
-                 print("The program will continue without the loaded data\n")
-             elif (self.regs[self.reg1] + self.o) >= self.n_mem:
-                 print("Error : out of memory boundaries")
-                 print("The program will continue without the loaded data\n")
-             else : 
-                 self.regs[self.reg2] = self.data[self.regs[self.reg1]+self.o]
+             print(self.regs[self.reg1]+self.o)
+             self.regs[self.reg2],verif = self.get_data(self.regs[self.reg1]+self.o)
+            
+        self.c_cycle += 1 + verif*20
+             
+    
+    def get_data(self,addr):
+        """
+        Récupère la donnée dans le cache, à l'adresse considérée.
+        
+        Paramètres : 
+        --------------
+            addr : adresse considérée.
+            
+        Renvoie :
+        --------------
+            Dta : la donnée à l'adresse considérée.
+            
+        """
+        Dta = self.Cach.read(addr)
+        return(Dta)
+
+        
     
     def store(self):
         """
@@ -662,13 +671,12 @@ class VM():
         """
         if self.imm == 0:
              print('store r%s r%s r%s\n'%(self.reg1,self.o,self.reg2) )
-
-             self.data[self.regs[self.reg1] + self.regs[self.o] ] = self.regs[self.reg2] 
+             verif = self.Cach.write_through(self.regs[self.reg1] + self.regs[self.o], self.regs[self.reg2] )
         elif self.imm == 1:
              print('store r%s #%s r%s\n'%(self.reg1,self.o,self.reg2) )
              print(self.regs[self.reg1] + self.o )
-             self.data[self.regs[self.reg1] + self.o ] = self.regs[self.reg2] 
-
+             verif = self.Cach.write_through(self.regs[self.reg1] + self.o , self.regs[self.reg2] )
+        self.c_cycle += 1 + verif*10
     
     def jmp(self):
         """

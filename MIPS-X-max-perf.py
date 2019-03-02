@@ -8,6 +8,7 @@ Created on Mon Jan 14 10:38:49 2019
 
 import time
 import signal
+import numpy as np
 
 
 class VM():
@@ -767,10 +768,37 @@ class VM():
         
         print("Durée depuis l'initialisation de l'ISS : %f \n"%self.t_dps_deb)
         print("Durée depuis l'exécution du programme mis en entrée : %f \n"%self.t_dps_init)
-        
-Pg = VM('hexInstructions.txt')
+        return(self.t_dps_init)
 
-Pg.run()
-print(Pg.regs[3])
-print(Pg.c_cycle)
 
+def moy_perf(N):
+    """
+    Evalue la performance de l'ISS : le nombre moyen de cycles par seconde,
+    et le nombre maximal de cycles par seconde.
+
+        Paramètres : 
+        -------------
+            N : le nombre de tests voulant être effectué
+            
+        Renvoie : 
+        ------------
+            np.mean(L) : le nombre moyen de cycles par seconde
+            np.max(L) : le nombre maximal de cycles par seconde
+    """
+    L  = []
+    for k in range(N):
+        Pg = VM('hexInstructions.txt')
+        tps = Pg.run()
+        Nc = Pg.c_cycle
+        L.append(Nc/tps)
+    print(Pg.regs)
+    print(Pg.data[0:32])
+    return(np.mean(L), np.max(L))
+    
+
+print(moy_perf(1))
+#
+#Pg.run()
+#print(Pg.regs[3])
+#print(Pg.c_cycle)
+#
