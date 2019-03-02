@@ -36,8 +36,9 @@ class Interface(Frame):
         self.bouton_getfiles_hex = Button(self, text="Load Fichier Hexadecimal", command=self.getFiles_hex)
         self.bouton_getfiles_hex.grid(row=self.posISS, column = 0)
         
-#        self.bouton_startISS = Button(self, text="StartISS",command=self.startISS)
-#        self.bouton_startISS.grid(row=self.posISS,column=4)
+        self.bouton_startISS = Button(self, text="Run",command=self.startISS)
+        self.bouton_startISS.grid(row=self.posISS,column=4)
+        
         
         self.bouton_pasapas = Button(self, text="Pas à Pas", command=self.pasapas)
         self.bouton_pasapas.grid(row=self.posISS,column=3)
@@ -90,15 +91,19 @@ class Interface(Frame):
         path = Label(self, text= filename)
         path.grid(row=self.posISS + 1, column=2)
 
-    def startISS(self):
+    def startISS(self):     
         while(self.simulation.running != 0):
-            t0 = time.time()
-            while time.time()-t0 < 1 :
-                pass
+            self.bouton_pause = Button(self, text="Pause",command=self.pauseISS)
+            self.bouton_pause.grid(row=self.posISS,column=5)
             self.simulation.unTour()
+            time.sleep(0.1)
             
-        
+
         self.affichageReg(self.simulation.outTextRegs())
+
+    
+    def pauseISS(self):
+        self.simulation.running = 0
         
     def pasapas(self):
         
