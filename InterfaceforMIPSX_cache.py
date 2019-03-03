@@ -25,7 +25,7 @@ class Interface(Frame):
         self.italic6 = tkFont.Font( size=6, slant = 'italic')
         
         #initialisation de la vm
-#        self.simulation = MIPS_X_interface.VM("")
+#        self.simulation = MIPS_X_Cache_interface.VM("")
     
         #creation des boutons
         self.bouton_quitter = Button(self, text="Quitter", bg = "red", command=self.quit)
@@ -65,22 +65,24 @@ class Interface(Frame):
         self.labelCacheBlock = Label(self, text= 'Block',font = self.TitleFont)
         self.labelCacheBlock.grid(row = 10, column = 3)
         
+        self.deb_ISS = 0
+        self.fin_ISS = 0
         #Pour reperer les lignes
-        Label(self, text = '   0',font = self.italic6).grid(row = 0, column = 10)
-        Label(self, text = '   1',font = self.italic6).grid(row = 1, column = 10)
-        Label(self, text = '   2',font = self.italic6).grid(row = 2, column = 10)
-        Label(self, text = '   3',font = self.italic6).grid(row = 3, column = 10)
-        Label(self, text = '   4',font = self.italic6).grid(row = 4, column = 10)
-        Label(self, text = '   5',font = self.italic6).grid(row = 5, column = 10)
-        Label(self, text = '   6',font = self.italic6).grid(row = 6, column = 10)
-        Label(self, text = '   7',font = self.italic6).grid(row = 7, column = 10)
-        Label(self, text = '   8',font = self.italic6).grid(row = 8, column = 10)
-        Label(self, text = '   9',font = self.italic6).grid(row = 9, column = 10)
-        Label(self, text = '  10',font = self.italic6).grid(row = 10, column = 10) 
-        Label(self, text = '  11',font = self.italic6).grid(row = 11, column = 10)
-        Label(self, text = '  12',font = self.italic6).grid(row = 12, column = 10)
-        Label(self, text = '  13',font = self.italic6).grid(row = 13, column = 10)
-        Label(self, text = '  14',font = self.italic6).grid(row = 14, column = 10)
+#        Label(self, text = '   0',font = self.italic6).grid(row = 0, column = 10)
+#        Label(self, text = '   1',font = self.italic6).grid(row = 1, column = 10)
+#        Label(self, text = '   2',font = self.italic6).grid(row = 2, column = 10)
+#        Label(self, text = '   3',font = self.italic6).grid(row = 3, column = 10)
+#        Label(self, text = '   4',font = self.italic6).grid(row = 4, column = 10)
+#        Label(self, text = '   5',font = self.italic6).grid(row = 5, column = 10)
+#        Label(self, text = '   6',font = self.italic6).grid(row = 6, column = 10)
+#        Label(self, text = '   7',font = self.italic6).grid(row = 7, column = 10)
+#        Label(self, text = '   8',font = self.italic6).grid(row = 8, column = 10)
+#        Label(self, text = '   9',font = self.italic6).grid(row = 9, column = 10)
+#        Label(self, text = '  10',font = self.italic6).grid(row = 10, column = 10) 
+#        Label(self, text = '  11',font = self.italic6).grid(row = 11, column = 10)
+#        Label(self, text = '  12',font = self.italic6).grid(row = 12, column = 10)
+#        Label(self, text = '  13',font = self.italic6).grid(row = 13, column = 10)
+#        Label(self, text = '  14',font = self.italic6).grid(row = 14, column = 10)
 
     def affichageMemoire(self,message):
         self.affmemoire = Label(self, text= message)
@@ -141,6 +143,7 @@ class Interface(Frame):
         self.path = Label(self, text= filename, font = self.italic)
         self.path.grid(row=self.posISS +1, column=0)
         print (filename)
+        self.fin_ISS = 0
         
     def getfiles_ass(self):
         self.filename_assembleur = filedialog.askopenfilename()
@@ -169,27 +172,40 @@ class Interface(Frame):
         self.simulation = MIPS_X_Cache_interface.VM(outputFileName)
         path = Label(self, text= outputFileName, font = self.italic)
         path.grid(row=self.posISS +1, column=0)
+        self.fin_ISS = 0
         
     def pasapas(self):
-        self.simulation.unTour()
-        self.affichageReg(self.simulation.outTextRegs())
-        self.affichageInstr(self.simulation.instruction)
-        self.affichageMemoire(self.simulation.outTextMem())
-        self.affichageProgrammeCounter()
-        self.affichageCache()
-        if self.simulation.running == 0:
-            self.showStatus()
+        if self.fin_ISS == 0:
+            if self.deb_ISS == 0:
+                self.simulation.deb_instr = time.time()
+            self.deb_ISS = 1
+            
+            self.simulation.unTour()
+            self.affichageReg(self.simulation.outTextRegs())
+            self.affichageInstr(self.simulation.instruction)
+            self.affichageMemoire(self.simulation.outTextMem())
+            self.affichageProgrammeCounter()
+            self.affichageCache()
+            if self.simulation.running == 0:
+                self.showStatus()
+                self.fin_ISS = 1
     
     def startISS(self): 
-        while(self.simulation.running != 0):
-            self.simulation.unTour()
-        self.affichageReg(self.simulation.outTextRegs())
-        self.affichageInstr(self.simulation.instruction)
-        self.affichageMemoire(self.simulation.outTextMem())
-        self.affichageProgrammeCounter()
-        self.affichageCache()
-        self.showStatus()
-        
+        if self.fin_ISS == 0:
+            if self.deb_ISS == 0:
+                self.simulation.deb_instr = time.time()
+            self.deb_ISS = 1
+            
+            while(self.simulation.running != 0):
+                self.simulation.unTour()
+            self.fin_ISS = 1
+            self.affichageReg(self.simulation.outTextRegs())
+            self.affichageInstr(self.simulation.instruction)
+            self.affichageMemoire(self.simulation.outTextMem())
+            self.affichageProgrammeCounter()
+            self.affichageCache()
+            self.showStatus()
+            
         
         
     
