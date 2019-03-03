@@ -9,7 +9,7 @@ Le bouton : Convertir en Hexadecimal permet de lancer la conversion du fichier d
 le bouton : Load Fichier Hexadecimal permet de choisir le fichier en hexedecimal que l'on veut executer.
 Il remplace alors les étapes des boutons Fichier à compiler - Assembly.
 
-le bouton : Load fichier Data Hexedecimal permet de charger le fichier de données 
+le bouton : Load fichier Data Hexedecimal permet de charger un fichier de données hexadecimal 
 Il remplace alors les étapes des boutons Fichier Data Decimal - Convertir en Hexadecimal
 
 Le bouton : Pas a Pas permet l'execution pas à pas du programme

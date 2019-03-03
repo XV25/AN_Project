@@ -11,7 +11,7 @@ class Interface(Frame):
 
     
     def __init__(self, fenetre, **kwargs):
-        Frame.__init__(self, fenetre, width=700, height=700, **kwargs)
+        Frame.__init__(self, fenetre, width=2000, height=720, **kwargs)
         fenetre.resizable(width=True,height=True)
         fenetre.title('Architecture Numérique')
         self.pack(fill=BOTH)
