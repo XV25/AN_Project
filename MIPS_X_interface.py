@@ -851,9 +851,6 @@ class VM():
         self.t_dps_deb = self.t_fin - self.t_init
         self.t_dps_init = self.t_fin - self.deb_instr
         
-        
-        
-        
     def run(self):
         """
         

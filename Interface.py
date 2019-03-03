@@ -18,8 +18,7 @@ class Interface(Frame):
         self.posAssembly = 2
         self.posISS = 5
         
-        #initialisation de la vm
-#        self.simulation = MIPS_X_interface.VM("")
+
     
         #creation des boutons
         self.bouton_quitter = Button(self, text="Quitter", bg = "green", command=self.quit)
