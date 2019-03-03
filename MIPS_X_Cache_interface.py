@@ -788,19 +788,43 @@ class VM():
     
         
     def unTour(self):
-        if self.pc ==0:
-            self.deb_instr = time.time()
-
-        instr = self.fetch()
-        self.decode(instr)
-        self.evalu()
-        self.regs[0] = 0
+        if self.running != 0:
+            instr = self.fetch()
+            self.decode(instr)
+            self.evalu()
+            self.regs[0] = 0
         
     def get_information_temps(self):
         self.t_fin = time.time()
         self.t_dps_deb = self.t_fin - self.t_init
         self.t_dps_init = self.t_fin - self.deb_instr
 
+
+    def RAZ(self):
+        self.pc = 0
+        self.regs = [0 for k in range(self.n_reg)]
+        self.Cach.Mem.data = [None for k in range(self.n_mem)] 
+        S = self.Cach.S
+        B = self.Cach.B
+        self.Cach.Cache = []
+        for k in range(S):
+            self.Cach.Cache += [C.Bloc(0,None,B)]
+        
+        self.pc = 0
+
+        self.instrNum = 0
+        self.reg1 = 0
+        self.reg2 = 0
+
+        self.imm = 0
+        self.o = 0
+        self.a = 0
+        self.n = 0
+        self.c_cycle = 0
+        
+        self.instruction = ''
+        
+        self.running = 1 # voir si nécess ou non.
     
 
     def run(self):
