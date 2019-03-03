@@ -1,17 +1,22 @@
-Lancer avec python le fichier interface.py
+Lancer avec python le fichier InterfaceforMIPSX_cache.py
 
 Le bouton : Fichier à compiler permet de choisir un fichier assembleur que l'on veut convertir en fichier Hexadecimal
 Le bouton : Assembly permet de lancer la conversion du fichier assembleur en fichier hexadecimal. Le fichier de sortie est automatiquement chargé pour l'execution
 
-Execution : Commencer par charger le code Hexadecimal avant les donnees 
+Le bouton : Fichier Data Decimal permet de choisir un fichier de données que l'on veut convertir en fichier Hexadecimal
+Le bouton : Convertir en Hexadecimal permet de lancer la conversion du fichier de données en fichier hexadecimal. Le fichier de sortie est automatiquement chargé pour l'execution
 
-le bouton : Load Fichier Hexadecimal permet de choisir le fichier en hexedeciaml que l'on veut executer
+le bouton : Load Fichier Hexadecimal permet de choisir le fichier en hexedecimal que l'on veut executer.
+Il remplace alors les étapes des boutons Fichier à compiler - Assembly.
 
-le bouton : Load fichier Data Hexedecimal permet de charger n fichier de données 
+le bouton : Load fichier Data Hexedecimal permet de charger le fichier de données 
+Il remplace alors les étapes des boutons Fichier Data Decimal - Convertir en Hexadecimal
 
 Le bouton : Pas a Pas permet l'execution pas à pas du programme
 Le bouton : Run permet de l'executer d'un seul coup
 
+Le bouton : Réinitialiser permet de réinitialiser l'affichage graphique, pour exécuter
+un nouveau programme.
 
 
 
