@@ -5,8 +5,8 @@ Created on Sun Feb  3 14:01:25 2019
 @author: ehnla
 """
 
-inputFileName = 'decdata.txt'
-outputFileName = 'hexdata.txt'
+#inputFileName = 'decdata.txt'
+#outputFileName = 'hexdata.txt'
 
 def load_dec(fileName):
     """
@@ -78,7 +78,8 @@ def output_hex_data(hexData, fileName,deb_add):
         adress +=1
     return(None)
 
-
-strData = load_dec(inputFileName)
-decData = analyse_data(strData)
-output_hex_data(decData,outputFileName,0x1)
+if __name__ == "__main__" :
+    
+    strData = load_dec(inputFileName)
+    decData = analyse_data(strData)
+    output_hex_data(decData,outputFileName,0x1)
