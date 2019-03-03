@@ -12,7 +12,7 @@ class Interface(Frame):
     
     def __init__(self, fenetre, **kwargs):
         Frame.__init__(self, fenetre, width=700, height=700, **kwargs)
-        fenetre.resizable(width=False,height=False)
+        fenetre.resizable(width=True,height=True)
         fenetre.title('Architecture Numérique')
         self.pack(fill=BOTH)
         self.nb_clic = 0
@@ -81,47 +81,59 @@ class Interface(Frame):
         
         
         #Pour reperer les lignes
-#        Label(self, text = '   0',font = self.italic6).grid(row = 0, column = 10)
-#        Label(self, text = '   1',font = self.italic6).grid(row = 1, column = 10)
-#        Label(self, text = '   2',font = self.italic6).grid(row = 2, column = 10)
-#        Label(self, text = '   3',font = self.italic6).grid(row = 3, column = 10)
-#        Label(self, text = '   4',font = self.italic6).grid(row = 4, column = 10)
-#        Label(self, text = '   5',font = self.italic6).grid(row = 5, column = 10)
-#        Label(self, text = '   6',font = self.italic6).grid(row = 6, column = 10)
-#        Label(self, text = '   7',font = self.italic6).grid(row = 7, column = 10)
-#        Label(self, text = '   8',font = self.italic6).grid(row = 8, column = 10)
-#        Label(self, text = '   9',font = self.italic6).grid(row = 9, column = 10)
-#        Label(self, text = '  10',font = self.italic6).grid(row = 10, column = 10) 
-#        Label(self, text = '  11',font = self.italic6).grid(row = 11, column = 10)
-#        Label(self, text = '  12',font = self.italic6).grid(row = 12, column = 10)
-#        Label(self, text = '  13',font = self.italic6).grid(row = 13, column = 10)
-#        Label(self, text = '  14',font = self.italic6).grid(row = 14, column = 10)
+        Label(self, text = '   0',font = self.italic6).grid(row = 0, column = 10)
+        Label(self, text = '   1',font = self.italic6).grid(row = 1, column = 10)
+        Label(self, text = '   2',font = self.italic6).grid(row = 2, column = 10)
+        Label(self, text = '   3',font = self.italic6).grid(row = 3, column = 10)
+        Label(self, text = '   4',font = self.italic6).grid(row = 4, column = 10)
+        Label(self, text = '   5',font = self.italic6).grid(row = 5, column = 10)
+        Label(self, text = '   6',font = self.italic6).grid(row = 6, column = 10)
+        Label(self, text = '   7',font = self.italic6).grid(row = 7, column = 10)
+        Label(self, text = '   8',font = self.italic6).grid(row = 8, column = 10)
+        Label(self, text = '   9',font = self.italic6).grid(row = 9, column = 10)
+        Label(self, text = '  10',font = self.italic6).grid(row = 10, column = 10) 
+        Label(self, text = '  11',font = self.italic6).grid(row = 11, column = 10)
+        Label(self, text = '  12',font = self.italic6).grid(row = 12, column = 10)
+        Label(self, text = '  13',font = self.italic6).grid(row = 13, column = 10)
+        Label(self, text = '  14',font = self.italic6).grid(row = 14, column = 10)
         
-        Label(self, text = '   ',font = self.italic6).grid(row = 0, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 1, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 2, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 3, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 4, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 5, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 6, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 7, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 8, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 9, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 10, column = 10) 
-        Label(self, text = '   ',font = self.italic6).grid(row = 11, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 12, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 13, column = 10)
-        Label(self, text = '   ',font = self.italic6).grid(row = 14, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 0, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 1, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 2, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 3, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 4, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 5, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 6, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 7, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 8, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 9, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 10, column = 10) 
+#        Label(self, text = '   ',font = self.italic6).grid(row = 11, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 12, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 13, column = 10)
+#        Label(self, text = '   ',font = self.italic6).grid(row = 14, column = 10)
 
     def affichageMemoire(self,message):
+        try : 
+            self.affmemoire.destroy()
+        except:
+            pass
         self.affmemoire = Label(self, text= message)
         self.affmemoire.grid(row = self.posISS+3, column = 2)
     
     def affichageReg(self, message ):
+        try:
+            self.affReg.destroy()
+        except:
+            pass
         self.affReg = Label(self, text= str(message))
         self.affReg.grid(row = self.posISS + 3, column = 3)
         
     def affichageInstr(self,message):
+        try:
+            self.affInstr.destroy()
+        except: 
+            pass
         self.affInstr = Label(self, text = message)
         self.affInstr.grid(row = self.posISS + 3, column = 0)
         
@@ -157,10 +169,18 @@ class Interface(Frame):
           
             
     def affichageProgrammeCounter(self):
+        try :
+            self.affPC.destroy()
+        except : 
+            pass
         self.affPC = Label(self, text = "pc = {}".format(self.simulation.pc))
         self.affPC.grid(row = self.posISS + 4, column = 3)
         
     def showStatus(self):
+        try:
+            self.affInstr.destroy()
+        except: 
+            pass
         self.simulation.get_information_temps()
         nombre_de_cycle = self.simulation.c_cycle
         temps_execution = self.simulation.t_dps_init
@@ -169,12 +189,20 @@ class Interface(Frame):
         self.affInstr.grid(row = self.posISS + 3, column = 0)        
     
     def getfiles_data(self):
+        try :
+            self.path_getfiles_data.destroy()
+        except :
+            pass
         self.filename_data_decimal = filedialog.askopenfilename()
         self.path_getfiles_data = Label(self, text= self.filename_data_decimal, font = self.italic)
         self.path_getfiles_data.grid(row=self.posData +1, column=0)
         
    
     def getFiles_hex(self):
+        try :
+            self.path_getFiles_Hex.destroy()
+        except :
+            pass
         filename = filedialog.askopenfilename()
         self.fichier_programme_hex = filename
         self.path_getFiles_Hex = Label(self, text= filename, font = self.italic)
@@ -182,11 +210,19 @@ class Interface(Frame):
         self.fin_ISS = 0
         
     def getfiles_ass(self):
+        try :
+            self.path_getfiles_ass.destroy()
+        except :
+            pass
         self.filename_assembleur = filedialog.askopenfilename()
         self.path_getfiles_ass = Label(self, text= self.filename_assembleur, font = self.italic)
         self.path_getfiles_ass.grid(row=self.posAssembly +1, column=0)
         
     def loadData(self):
+        try :
+            self.path_loadData.destroy()
+        except :
+            pass
         filename = filedialog.askopenfilename()
         self.fichier_data_hex = filename
         
@@ -194,6 +230,14 @@ class Interface(Frame):
         self.path_loadData.grid(row=self.posISS + 1, column=2)
         
     def file_data_Dec2Hex(self):
+        try :
+            self.path_file_data_Dec2Hex.destroy()
+        except :
+            pass
+        try :
+            self.path_loadData.destroy()
+        except :
+            pass
         inputFileName = self.filename_data_decimal
         outputFileName = self.filename_data_decimal[0:len(self.filename_data_decimal)-4]+"HEX.txt"
         self.fichier_data_hex = outputFileName
@@ -215,6 +259,15 @@ class Interface(Frame):
 
 
     def startAssembly(self):
+        try :
+            self.path_startAssembly.destroy()
+        except : 
+            pass
+        try :
+            self.path_getFiles_Hex.destroy()
+        except : 
+            pass
+        
         inputFileName = self.filename_assembleur
         outputFileName = self.filename_assembleur[0:len(self.filename_assembleur)-4]+"HEX.txt"
     
@@ -280,6 +333,7 @@ class Interface(Frame):
         except :
             pass
         
+        
     def clearaffichage(self):
         try :
             self.path_getfiles_data.destroy()
@@ -311,14 +365,17 @@ class Interface(Frame):
             self.affInstr.destroy()
         except: 
             pass
+        
         try :
             self.affPC.destroy()
         except : 
             pass
+        
         try:
             self.affReg.destroy()
         except:
             pass
+        
         try : 
             self.affmemoire.destroy()
         except:
@@ -339,7 +396,6 @@ class Interface(Frame):
             
             posLigne +=1
             
-        
     
 if __name__ == "__main__":
     fenetre = Tk()
